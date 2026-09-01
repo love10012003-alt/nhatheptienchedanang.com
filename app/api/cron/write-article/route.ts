@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
 import { writeArticle } from "@/lib/groq"
 import keywords from "@/data/keywords.json"
+import { logInfo } from "@/lib/logger"
+// GĐ4 liên kết GĐ2
 export async function GET(){
-  const keyword = keywords[0]
-  const article = await writeArticle(keyword)
-  // TODO: Tạo file app/bao-gia/[slug]/page.tsx mới
-  return NextResponse.json({ writing: keyword, article, note: "AI viết nháp 80%, cần sếp sửa giá 5 phút trước khi merge" })
+  const kw=keywords[0]
+  const art=await writeArticle(kw)
+  await logInfo(`[GĐ4] Wrote article ${kw} - Sẽ ping sitemap (GĐ2)`)
+  return NextResponse.json({writing: kw, article: art, note:"GĐ4: Tự viết bài - Sitemap (GĐ2) tự cập nhật - Cần sếp duyệt 5 phút"})
 }

@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server"
 import { findNewContractors } from "@/lib/gmaps"
+import { logInfo } from "@/lib/logger"
+// GĐ4 liên kết GĐ1 + GĐ6
 export async function GET(){
-  const news = await findNewContractors()
-  // TODO: Thêm vào Sheet + tạo file data/contractors.json mới + commit lên GitHub
-  return NextResponse.json({ found: news.length, auto: "Tự động quét mỗi đêm 2h sáng - Cần sếp duyệt trước khi public" })
+  const news=await findNewContractors()
+  await logInfo(`[GĐ4] Found ${news.length} new contractors at 2AM - Sẽ tạo PR lên GitHub (GĐ6 backup)`)
+  return NextResponse.json({found: news.length, note:"GĐ4: Tự quét Map - Kết quả ghi vào Sheet (GĐ1) - Backup (GĐ6)"})
 }

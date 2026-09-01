@@ -1,4 +1,2 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-body { font-family: 'Be Vietnam Pro', sans-serif; background: #F8FAFC; }
+@tailwind base;@tailwind components;@tailwind utilities;
+body{font-family:'Be Vietnam Pro',sans-serif;background:#F8FAFC}

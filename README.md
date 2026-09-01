@@ -1,23 +1,18 @@
-# nhatheptienchedanang.com - Chợ Nhà Thầu 0đ VPS
-Stack: Next.js + Vercel (free) + GitHub (két sắt) + Google Sheet (DB) + Cloudflare (DNS)
+# nhatheptienchedanang.com - BẢN PROFESSIONAL 0Đ - 6 GIAI ĐOẠN ĐỘC LẬP
 
-## Cấu trúc bắt buộc - Quản lý không cần code
-- Mọi data nhà thầu CHỈ được lấy qua `lib/sheets.ts`
-- Mọi Card nhà thầu CHỈ được dùng `components/contractor/ContractorCard.tsx`
-- Mỗi PR phải có link Vercel Preview để sếp duyệt bằng mắt
+## Kiến trúc chia giai đoạn - Mỗi giai đoạn là 1 module độc lập có liên kết
+- Giai đoạn 1: Core Data + Cache (lib/sheets.ts + lib/cache.ts) -> Chạy được ngay, không cần giai đoạn khác
+- Giai đoạn 2: SEO Pro (app/sitemap.ts, robots.ts, components/seo/*) -> Phụ thuộc GĐ1
+- Giai đoạn 3: Security (middleware.ts, lib/turnstile.ts, lib/ratelimit.ts) -> Độc lập, gắn vào là chạy
+- Giai đoạn 4: Auto Growth (app/api/cron/*) -> Phụ thuộc GĐ1 + GĐ2
+- Giai đoạn 5: Monetization (lib/sepay.ts, app/api/lead) -> Phụ thuộc GĐ1 + GĐ3
+- Giai đoạn 6: Ops (github/workflows/backup.yml, lib/backup.ts) -> Độc lập, chạy ngầm
 
-## Chạy local
-npm install
-npm run dev
+## Cách giao việc cho dev
+Mỗi dev chỉ cần làm 1 thư mục giai đoạn, không đụng nhau:
+- Dev A: GĐ1 + GĐ2 (UI + SEO)
+- Dev B: GĐ3 + GĐ5 (Bảo mật + Thu tiền)
+- Dev C: GĐ4 + GĐ6 (Tự động + Backup)
 
-## Deploy Vercel 1 click
-1. Fork repo này
-2. Vào vercel.com -> Import from GitHub
-3. Add env: SHEET_ID, GROQ_API_KEY, GMAPS_KEY
-4. Add domain nhatheptienchedanang.com
-
-## 4 vòng lặp tự động (Vercel Cron)
-- /api/cron/find-contractor - 2h sáng: quét Map
-- /api/cron/write-article - 7h sáng: viết bài AI
-- /api/lead - real-time: bán lead
-- /api/cron/report - Chủ nhật: gửi báo cáo nhà thầu
+## Deploy
+npm install && npm run build && vercel --prod
