@@ -1,0 +1,41 @@
+[
+  {
+    "slug": "zamin-steel-da-nang",
+    "name": "Zamin Steel Đà Nẵng",
+    "address": "KCN Hòa Khánh, Liên Chiểu, Đà Nẵng",
+    "phone": "0905 123 456",
+    "rating": 4.8,
+    "reviews": 24,
+    "tags": ["Nhà xưởng", "Chịu bão cấp 12", "Bảo hành 10 năm"],
+    "district": "Liên Chiểu",
+    "verified": true,
+    "premium": true,
+    "images": ["https://images.unsplash.com/photo-1504307651254-35680f356dfd"]
+  },
+  {
+    "slug": "hoa-khanh-steel",
+    "name": "Cơ Khí Hòa Khánh",
+    "address": "Hòa Khánh Bắc, Liên Chiểu",
+    "phone": "0905 654 321",
+    "rating": 4.6,
+    "reviews": 18,
+    "tags": ["Nhà kho", "Giá rẻ"],
+    "district": "Liên Chiểu",
+    "verified": true,
+    "premium": false,
+    "images": ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"]
+  },
+  {
+    "slug": "cam-le-steel",
+    "name": "Thép Tiền Chế Cẩm Lệ",
+    "address": "KCN Cẩm Lệ, Đà Nẵng",
+    "phone": "0905 111 222",
+    "rating": 4.9,
+    "reviews": 31,
+    "tags": ["Showroom", "Panel EPS"],
+    "district": "Cẩm Lệ",
+    "verified": true,
+    "premium": true,
+    "images": ["https://images.unsplash.com/photo-1504307651254-35680f356dfd"]
+  }
+]
