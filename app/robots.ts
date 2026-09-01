@@ -1,4 +1,11 @@
-// GĐ2: Robots chuyên nghiệp
+// GĐ2: Robots.txt chuyên nghiệp 0đ
+import { SITE_URL } from "@/lib/seo"
 export default function robots(){
-  return { rules:{userAgent:'*',allow:'/',disallow:'/admin'}, sitemap:'https://nhatheptienchedanang.com/sitemap.xml' }
+  return {
+    rules: [
+      { userAgent: '*', allow: '/', disallow: ['/admin', '/api/'] }
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL
+  }
 }
