@@ -1,1 +1,0 @@
-let m=new Map(); export async function getCache(k:string){const h=m.get(k); if(h&&h.exp>Date.now()) return h.data; return null} export async function setCache(k:string,d:any,ttl=3600){m.set(k,{data:d,exp:Date.now()+ttl*1000})}

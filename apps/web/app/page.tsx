@@ -1,1 +1,0 @@
-import { getContractors } from "@nhatheptienchedanang/core"; export default async function Page(){const cs=await getContractors(); return <div><h1>Monorepo Web - {cs.length} nhà thầu - Build 30s - Không lỗi cả cục</h1></div>}
