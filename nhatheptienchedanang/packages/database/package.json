@@ -1,0 +1,11 @@
+{
+  "name": "@repo/database",
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@repo/cache": "workspace:*",
+    "@repo/types": "workspace:*",
+    "googleapis": "^126.0.0",
+    "zod": "^3.23.0"
+  }
+}

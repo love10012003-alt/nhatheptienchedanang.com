@@ -1,0 +1,10 @@
+{
+  "name": "@repo/security",
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@repo/cache": "workspace:*",
+    "@upstash/ratelimit": "^1.0.0",
+    "@upstash/redis": "^1.28.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "nhatheptienchedanang",
+  "private": true,
+  "packageManager": "pnpm@8.15.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "health": "pnpm --filter web exec tsx app/api/health/route.ts"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.0",
+    "typescript": "^5.3.0"
+  }
+}

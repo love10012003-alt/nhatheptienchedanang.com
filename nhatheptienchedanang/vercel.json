@@ -1,0 +1,12 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "outputDirectory": "apps/web/.next",
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "crons": []
+}

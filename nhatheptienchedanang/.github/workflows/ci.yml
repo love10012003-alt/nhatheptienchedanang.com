@@ -1,0 +1,16 @@
+name: CI - Check từng package
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 8 }
+      - run: pnpm install
+      - run: pnpm build --filter=@repo/types
+      - run: pnpm build --filter=@repo/cache
+      - run: pnpm build --filter=@repo/database
+      - run: pnpm build --filter=@repo/seo
+      - run: pnpm build --filter=@repo/security
+      - run: pnpm build --filter=@repo/ui
