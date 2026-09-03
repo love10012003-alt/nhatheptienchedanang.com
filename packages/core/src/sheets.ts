@@ -1,0 +1,1 @@
+export type Contractor={slug:string;name:string;district:string}; export async function getContractors():Promise<Contractor[]>{return [{slug:"zamin-steel-da-nang",name:"Zamin Steel",district:"Liên Chiểu"}]}
