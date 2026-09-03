@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Upload & Unzip ZIP - Nhà Thép Tiền Chế Đà Nẵng</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen">
+<div class="max-w-4xl mx-auto p-6">
+  <div class="bg-white rounded-2xl shadow-lg p-6 border">
+    <h1 class="text-2xl font-bold text-slate-800">📦 Tool Upload & Unzip ZIP</h1>
+    <p class="text-sm text-slate-500 mt-1">Nhà Thép Tiền Chế Đà Nẵng - Chạy 100% trên trình duyệt, tương thích Vercel</p>
+    
+    <div id="drop" class="mt-6 border-2 border-dashed border-sky-300 rounded-2xl p-10 text-center bg-sky-50 hover:bg-sky-100 cursor-pointer transition">
+      <div class="text-5xl">📂</div>
+      <p class="mt-3 font-medium text-slate-700">Kéo file .zip vào đây hoặc click để chọn</p>
+      <p class="text-xs text-slate-400 mt-1">Tối đa 500MB (Vercel khuyến nghị < 4.5MB nếu dùng API)</p>
+      <input id="fileInput" type="file" accept=".zip" class="hidden">
+    </div>
+
+    <div id="stats" class="hidden mt-6 grid grid-cols-3 gap-3">
+      <div class="bg-slate-100 rounded-xl p-3 text-center"><div id="totalFiles" class="text-xl font-bold">0</div><div class="text-xs text-slate-500">Files</div></div>
+      <div class="bg-slate-100 rounded-xl p-3 text-center"><div id="totalSize" class="text-xl font-bold">0 KB</div><div class="text-xs text-slate-500">Dung lượng</div></div>
+      <div class="bg-slate-100 rounded-xl p-3 text-center"><div id="zipName" class="text-sm font-bold truncate">-</div><div class="text-xs text-slate-500">Tên file</div></div>
+    </div>
+
+    <div id="listWrap" class="hidden mt-6">
+      <div class="flex justify-between items-center">
+        <h2 class="font-semibold">Danh sách file trong ZIP</h2>
+        <button id="downloadAll" class="text-xs bg-slate-800 text-white px-3 py-1.5 rounded-lg">Tải tất cả (từng file)</button>
+      </div>
+      <div class="mt-3 max-h-[400px] overflow-auto border rounded-xl">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-100 sticky top-0"><tr><th class="text-left p-2">Tên file / Thư mục</th><th class="text-right p-2">Size</th><th class="p-2">Action</th></tr></thead>
+          <tbody id="fileList"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="preview" class="hidden mt-6 bg-slate-900 text-slate-100 rounded-xl p-4">
+      <div class="flex justify-between"><strong id="previewName" class="text-sm"></strong><button onclick="document.getElementById('preview').classList.add('hidden')" class="text-xs">Đóng</button></div>
+      <pre id="previewContent" class="mt-3 text-xs whitespace-pre-wrap max-h-64 overflow-auto"></pre>
+      <img id="previewImg" class="hidden mt-3 max-w-full rounded-lg">
+    </div>
+  </div>
+  <p class="text-xs text-slate-400 mt-4 text-center">Cách dùng trên Vercel: Upload file html này vào thư mục /public hoặc deploy như 1 trang tĩnh. Hoặc dùng bản Next.js trong zip-package.</p>
+</div>
+
+<script>
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+let zipEntries = [];
+
+drop.addEventListener('click', () => fileInput.click());
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('bg-sky-200'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('bg-sky-200'));
+drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('bg-sky-200'); handleFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+async function handleFile(file){
+  if(!file) return;
+  document.getElementById('stats').classList.remove('hidden');
+  document.getElementById('zipName').textContent = file.name;
+  const zip = new JSZip();
+  const loaded = await zip.loadAsync(file);
+  zipEntries = [];
+  fileList.innerHTML = '';
+  let totalSize = 0;
+  for(const [path, entry] of Object.entries(loaded.files)){
+    if(entry.dir) continue;
+    const blob = await entry.async('blob');
+    totalSize += blob.size;
+    zipEntries.push({path, blob, size: blob.size, entry});
+    const tr = document.createElement('tr');
+    tr.className = 'border-b hover:bg-slate-50';
+    tr.innerHTML = `<td class="p-2 truncate max-w-[300px]">${path}</td><td class="p-2 text-right">${(blob.size/1024).toFixed(1)} KB</td><td class="p-2 text-center"><button class="text-xs bg-sky-500 text-white px-2 py-1 rounded" onclick="previewFile(${zipEntries.length-1})">Xem</button> <button class="text-xs bg-slate-200 px-2 py-1 rounded" onclick="downloadFile(${zipEntries.length-1})">Tải</button></td>`;
+    fileList.appendChild(tr);
+  }
+  document.getElementById('totalFiles').textContent = zipEntries.length;
+  document.getElementById('totalSize').textContent = (totalSize/1024/1024).toFixed(2) + ' MB';
+  document.getElementById('listWrap').classList.remove('hidden');
+}
+
+function downloadFile(idx){
+  const f = zipEntries[idx];
+  const url = URL.createObjectURL(f.blob);
+  const a = document.createElement('a'); a.href = url; a.download = f.path.split('/').pop(); a.click();
+  URL.revokeObjectURL(url);
+}
+
+function previewFile(idx){
+  const f = zipEntries[idx];
+  document.getElementById('preview').classList.remove('hidden');
+  document.getElementById('previewName').textContent = f.path;
+  const previewContent = document.getElementById('previewContent');
+  const previewImg = document.getElementById('previewImg');
+  previewContent.textContent = '';
+  previewImg.classList.add('hidden');
+  
+  if(/\.(png|jpg|jpeg|gif|webp|svg)$/i.test(f.path)){
+    previewImg.src = URL.createObjectURL(f.blob);
+    previewImg.classList.remove('hidden');
+  } else {
+    f.entry.async('string').then(text => {
+      previewContent.textContent = text.slice(0, 10000);
+    }).catch(()=> previewContent.textContent = '[Không xem được file nhị phân]');
+  }
+}
+
+document.getElementById('downloadAll').addEventListener('click', ()=>{
+  zipEntries.forEach((_,i)=> downloadFile(i));
+});
+</script>
+</body>
+</html>
